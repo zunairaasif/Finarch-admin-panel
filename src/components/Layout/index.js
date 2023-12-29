@@ -12,11 +12,9 @@ const Layout = ({ children }) => {
   return (
     <Grid container sx={style.dashboard}>
       {isMatch ? <SideMenu /> : null}
-      <Grid item md={10} sm={9} xs={12}>
+      <Grid item lg={9.85} md={9.85} sm={9.85} xs={12} sx={style.content}>
         {/* <Header /> */}
-        <Grid item md={12} sm={12} xs={12} sx={style.content}>
-          {children}
-        </Grid>
+        {children}
       </Grid>
     </Grid>
   );

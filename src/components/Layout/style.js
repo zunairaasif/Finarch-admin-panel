@@ -1,7 +1,7 @@
 const style = {
   dashboard: {
     display: "flex",
-    minHeight: "100vh",
+    height: "100vh",
   },
   content: {
     p: 3,

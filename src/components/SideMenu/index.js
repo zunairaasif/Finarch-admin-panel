@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Box, Grid, List, ListItemButton, ListItemText } from "@mui/material";
 
 import Collapse from "@mui/material/Collapse";
@@ -39,13 +39,17 @@ const SideMenu = () => {
   const [openProjects, setOpenProjects] = useState(false);
   const [openLocation, setOpenLocation] = useState(false);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handleLogout = () => {
     setToken(true);
     navigate("/");
   };
 
   return (
-    <Grid container item lg={2} md={2} sm={3} sx={style.sideMenu}>
+    <Grid container item lg={2.15} md={2.15} sm={2.15} style={style.sideMenu}>
       <Box sx={style.heading}>
         <img
           src={logo}

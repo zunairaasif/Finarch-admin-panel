@@ -49,7 +49,7 @@ const SideMenu = () => {
   };
 
   return (
-    <Grid container item lg={2.15} md={2.15} sm={2.15} style={style.sideMenu}>
+    <Grid container item lg={2.15} md={2.15} sm={3} style={style.sideMenu}>
       <Box sx={style.heading}>
         <img
           src={logo}

@@ -18,13 +18,15 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 import style from "./style";
-import { AuthContext } from "../../context";
 import logo from "../../images/logo-white.svg";
+import { AuthContext, UserContext } from "../../context";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
   const { setToken } = useContext(AuthContext);
   const baseUrl = process.env.REACT_APP_BASE_URL;
+  const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -37,22 +39,26 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = async (values, { setSubmitting }) => {
+  const handleSubmit = async (values) => {
+    setSubmitting(true);
     axios
       .post(`${baseUrl}/auth/login`, values)
       .then((response) => {
         if (response.data.success) {
           setToken(true);
+          setSubmitting(false);
+          setUser(response.data.data.email);
           navigate("/dashboard");
         } else {
           setOpenSnackbar(true);
+          setSubmitting(false);
           console.error("Error:", response.data.error);
         }
       })
       .catch((error) => {
         console.error("Error:", error);
+        setSubmitting(false);
       });
-    setSubmitting(false);
   };
 
   return (
@@ -78,7 +84,7 @@ const Login = () => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ isSubmitting, status }) => (
+          {({ status }) => (
             <Form style={style.form}>
               <Grid container gap={2} sx={style.login}>
                 <Box sx={style.form}>
@@ -134,9 +140,9 @@ const Login = () => {
                   color="primary"
                   sx={style.button}
                   variant="contained"
-                  disabled={isSubmitting}
+                  disabled={submitting}
                 >
-                  {isSubmitting ? "Logging in..." : "Login"}
+                  {submitting ? "Logging in..." : "Login"}
                 </Button>
               </Grid>
             </Form>

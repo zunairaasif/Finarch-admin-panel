@@ -29,28 +29,28 @@ const Routing = () => {
       <Routes>
         <Route path="/" element={<Login />} />
 
-        <Route element={<PrivateRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/quotations" element={<Quotations />} />
-          <Route path="/inquiries" element={<Inquiries />} />
-          <Route path="/add-slider-image" element={<AddSlider />} />
-          <Route path="/slider-images" element={<Slider />} />
-          <Route path="/add-project" element={<AddProject />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/add-team-member" element={<AddTeamMember />} />
-          <Route path="/team" element={<Team />} />
-          <Route path="/blogs" element={<Blogs />} />
-          <Route path="/add-blog" element={<AddBlog />} />
-          <Route path="/blogs" element={<Blogs />} />
-          <Route path="/add-user" element={<AddUser />} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/add-sub-service" element={<AddSubService />} />
-          <Route path="/sub-services" element={<SubService />} />
-          <Route path="/add-service" element={<AddService />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/add-location" element={<AddLocation />} />
-          <Route path="/offices" element={<Location />} />
-        </Route>
+        {/* <Route element={<PrivateRoute />}> */}
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/quotations" element={<Quotations />} />
+        <Route path="/inquiries" element={<Inquiries />} />
+        <Route path="/add-slider-image" element={<AddSlider />} />
+        <Route path="/slider-images" element={<Slider />} />
+        <Route path="/add-project" element={<AddProject />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/add-team-member" element={<AddTeamMember />} />
+        <Route path="/team" element={<Team />} />
+        <Route path="/blogs" element={<Blogs />} />
+        <Route path="/add-blog" element={<AddBlog />} />
+        <Route path="/blogs" element={<Blogs />} />
+        <Route path="/add-user" element={<AddUser />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/add-sub-service" element={<AddSubService />} />
+        <Route path="/sub-services" element={<SubService />} />
+        <Route path="/add-service" element={<AddService />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/add-location" element={<AddLocation />} />
+        <Route path="/offices" element={<Location />} />
+        {/* </Route> */}
       </Routes>
     </Router>
   );

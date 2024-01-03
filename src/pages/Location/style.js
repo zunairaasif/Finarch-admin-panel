@@ -44,7 +44,7 @@ const style = {
     alignItems: "center",
   },
 
-  //*********** Add Location*********** */
+  //*********** Add & Edit Location*********** */
 
   wrapper: {
     mt: 3,

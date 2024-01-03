@@ -47,7 +47,7 @@ const AddSlider = () => {
           "Content-Type": "multipart/form-data",
         },
       })
-      .then((response) => {
+      .then(() => {
         setLoading(false);
         setSuccess(true);
         setImage(null);

@@ -179,15 +179,7 @@ const AddTeamMember = () => {
                     Please attach the Porfolio Image of the Team Member.
                   </Typography>
                   {image && image.length > 0 ? (
-                    <Grid
-                      gap={2}
-                      container
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
+                    <Grid gap={2} container sx={style.display}>
                       <img
                         alt="Preview"
                         width={160}

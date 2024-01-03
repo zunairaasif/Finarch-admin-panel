@@ -21,7 +21,7 @@ const AddProject = () => {
   const fileInputRef = useRef(null);
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState([]);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -42,33 +42,50 @@ const AddProject = () => {
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
+    console.log("image", files);
     setImage(files);
   };
 
   const handleSubmit = (values, { setSubmitting, resetForm }) => {
     setSubmitting(true);
+    const formData = new FormData();
 
-    const postData = {
-      project_images: image[0],
-    };
+    for (const img of image) {
+      formData.append("project_images", img);
+    }
+
+    formData.append("name", values.name);
+    formData.append("location", values.location);
+    formData.append("year", values.year);
+    formData.append("client", values.client);
+    formData.append("type", values.type);
+    formData.append("category", values.category);
+    formData.append("size", values.size);
+    formData.append("status", values.status);
 
     axios
-      .post(`${baseUrl}/projects/postProject`, values, {
+      .post(`${baseUrl}/projects/postProject`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
-      .then((response) => {
-        setSubmitting(false);
-        setSuccess(true);
-        setImage(null);
-        resetForm();
+      .then((resp) => {
+        if (resp.data.success) {
+          setSubmitting(false);
+          setSuccess(true);
+          setImage([]);
+          resetForm();
+        } else {
+          console.log(resp.data);
+          setSubmitting(false);
+          setError(true);
+        }
       })
       .catch((error) => {
         console.error("Uploading Error:", error);
         setSubmitting(false);
         setError(true);
-        setImage(null);
+        setImage([]);
       });
   };
 
@@ -86,7 +103,7 @@ const AddProject = () => {
       >
         <Alert sx={style.field} severity={"error"}>
           <Typography variant="body1">
-            Error posting image! Try again!
+            Error posting project! Try again!
           </Typography>
         </Alert>
       </Snackbar>
@@ -102,7 +119,7 @@ const AddProject = () => {
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
         <Alert sx={style.field} severity={"success"}>
-          <Typography variant="body1">Image posted successfully!</Typography>
+          <Typography variant="body1">Project posted successfully!</Typography>
         </Alert>
       </Snackbar>
 
@@ -278,37 +295,58 @@ const AddProject = () => {
                     Please attach the Porfolio Image of the Project in the
                     sequence you want to be displayed on the website.
                   </Typography>
-                  <Grid
-                    item
-                    lg={3}
-                    md={5}
-                    sm={5}
-                    xs={8}
-                    sx={style.upload}
-                    onClick={handleUpload}
-                  >
-                    <input
-                      multiple
-                      type="file"
-                      accept="image/*"
-                      ref={fileInputRef}
-                      style={{ display: "none" }}
-                      onChange={handleFileChange}
-                    />
-                    {image && image.length > 0 ? (
-                      image?.map((data, index) => (
-                        <Typography
+                  {image && image.length > 0 ? (
+                    <Grid gap={2} container sx={style.display}>
+                      {image.map((file, index) => (
+                        <img
                           key={index}
-                          variant="body1"
-                          sx={{ color: "black" }}
-                        >
-                          {data.name}
-                        </Typography>
-                      ))
-                    ) : (
+                          width={200}
+                          height={160}
+                          alt={`Preview ${index + 1}`}
+                          src={URL.createObjectURL(file)}
+                        />
+                      ))}
+                      <Grid
+                        item
+                        lg={4}
+                        md={4}
+                        sm={5}
+                        xs={8}
+                        sx={style.upload}
+                        onClick={handleUpload}
+                      >
+                        <input
+                          multiple
+                          type="file"
+                          accept="image/*"
+                          ref={fileInputRef}
+                          style={{ display: "none" }}
+                          onChange={handleFileChange}
+                        />
+                        <CameraAltIcon sx={style.imgIcon} />
+                      </Grid>
+                    </Grid>
+                  ) : (
+                    <Grid
+                      item
+                      lg={5}
+                      md={5}
+                      sm={5}
+                      xs={8}
+                      sx={style.upload}
+                      onClick={handleUpload}
+                    >
+                      <input
+                        multiple
+                        type="file"
+                        accept="image/*"
+                        ref={fileInputRef}
+                        style={{ display: "none" }}
+                        onChange={handleFileChange}
+                      />
                       <CameraAltIcon sx={style.imgIcon} />
-                    )}
-                  </Grid>
+                    </Grid>
+                  )}
 
                   <Button
                     fullWidth

@@ -36,7 +36,7 @@ const AddUser = () => {
 
     axios
       .post(`${baseUrl}/auth/createUser`, values)
-      .then((response) => {
+      .then(() => {
         setSubmitting(false);
         setSuccess(true);
         resetForm();

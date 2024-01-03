@@ -83,6 +83,11 @@ const style = {
     color: "red",
     fontSize: 12,
   },
+  display: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   upload: {
     p: 7,
     mt: 2,

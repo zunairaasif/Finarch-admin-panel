@@ -21,7 +21,6 @@ const EditLocation = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const initialLocationDetails = state?.row;
-  console.log("Data", initialLocationDetails);
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
   const [error, setError] = useState(false);
@@ -79,9 +78,9 @@ const EditLocation = () => {
 
       <Grid container sx={style.wrapper}>
         <Grid item lg={9} md={9} sm={12} xs={12} container sx={style.container}>
-          <Typography variant="h4">Edit Office Location</Typography>
+          <Typography variant="h4">Update Office Location</Typography>
           <Typography variant="body2" sx={style.space}>
-            Please edit details of the Office below.
+            Please update details of the Office below.
           </Typography>
 
           <Formik

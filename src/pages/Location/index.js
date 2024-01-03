@@ -193,7 +193,7 @@ const Location = () => {
                                         backgroundColor: "#0bce05",
                                       }}
                                       onClick={() =>
-                                        navigate(`edit-location/${row.id}`, {
+                                        navigate(`update-location/${row.id}`, {
                                           state: { row },
                                         })
                                       }

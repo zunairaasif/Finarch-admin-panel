@@ -15,6 +15,7 @@ import {
   TablePagination,
 } from "@mui/material";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -25,6 +26,7 @@ import { UserContext } from "../../context";
 import Layout from "../../components/Layout";
 
 const User = () => {
+  const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
@@ -186,6 +188,11 @@ const User = () => {
                                         ...style.action,
                                         backgroundColor: "#0bce05",
                                       }}
+                                      onClick={() =>
+                                        navigate(`update-user/${row.id}`, {
+                                          state: { row },
+                                        })
+                                      }
                                     >
                                       <EditIcon />
                                     </Box>

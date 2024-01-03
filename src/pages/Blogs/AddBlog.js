@@ -45,13 +45,21 @@ const AddBlog = () => {
   const handleSubmit = (values, { setSubmitting, resetForm }) => {
     setSubmitting(true);
 
-    const postData = {
-      ...values,
-      image: image,
-    };
+    const formData = new FormData();
+
+    for (const img of image) {
+      formData.append("image", img);
+    }
+
+    formData.append("id", values.id);
+    formData.append("title", values.title);
+    formData.append("author", values.author);
+    formData.append("category", values.category);
+    formData.append("tags", values.tags);
+    formData.append("description", values.description);
 
     axios
-      .post(`${baseUrl}/blog/postBlog`, postData, {
+      .post(`${baseUrl}/blog/postBlog`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -63,7 +71,6 @@ const AddBlog = () => {
           setImage(null);
           resetForm();
         } else {
-          console.log(resp.data);
           setSubmitting(false);
           setError(true);
         }

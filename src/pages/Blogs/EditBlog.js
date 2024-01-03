@@ -45,10 +45,6 @@ const EditBlog = () => {
     setImage(files);
   };
 
-  useEffect(() => {
-    console.log("file", image);
-  });
-
   const handleSubmit = (values, { setSubmitting }) => {
     setSubmitting(true);
 
@@ -69,7 +65,6 @@ const EditBlog = () => {
           setSubmitting(false);
           navigate("/blogs");
         } else {
-          console.log(resp.data);
           setSubmitting(false);
           setError(true);
         }

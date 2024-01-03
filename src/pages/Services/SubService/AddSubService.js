@@ -67,6 +67,7 @@ const AddSubService = () => {
       .then(() => {
         setSubmitting(false);
         setSuccess(true);
+        setService("");
         resetForm();
       })
       .catch((error) => {
@@ -123,7 +124,7 @@ const AddSubService = () => {
             initialValues={{
               name: "",
               weightage: "",
-              service_id: null,
+              service_id: "",
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}

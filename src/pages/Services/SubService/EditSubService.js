@@ -27,14 +27,13 @@ const EditSubService = () => {
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
   const [error, setError] = useState(false);
+  const [services, setServices] = useState([]);
+  const [loadingServices, setLoadingServices] = useState(false);
   const [service, setService] = useState(
     initialSubServiceDetails?.service_name || ""
   );
-  const [services, setServices] = useState([]);
-  const [loadingServices, setLoadingServices] = useState(false);
 
   const validationSchema = Yup.object().shape({
-    service_id: Yup.string().required("Required!"),
     name: Yup.string().required("Required!"),
     weightage: Yup.string().required("Required!"),
   });
@@ -115,7 +114,7 @@ const EditSubService = () => {
             initialValues={{
               name: initialSubServiceDetails?.name || "",
               weightage: initialSubServiceDetails?.weightage || "",
-              service_id: initialSubServiceDetails?.service_id || null,
+              service_id: initialSubServiceDetails?.service_id || "",
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
@@ -137,21 +136,18 @@ const EditSubService = () => {
                         size="small"
                         value={service}
                         sx={style.select}
-                        // name="service_id"
                         id="demo-simple-select"
                         onChange={(event) => handleChange(event, setFieldValue)}
                       >
+                        <MenuItem
+                          value={initialSubServiceDetails.service_name}
+                        ></MenuItem>
                         {services?.map((data) => (
                           <MenuItem key={data.id} value={data.service_name}>
                             {data.service_name}
                           </MenuItem>
                         ))}
                       </Select>
-                      <ErrorMessage
-                        component="div"
-                        name="service_id"
-                        style={style.error}
-                      />
                     </Box>
                   )}
 

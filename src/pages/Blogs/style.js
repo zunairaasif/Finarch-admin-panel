@@ -67,6 +67,10 @@ const style = {
     alignItems: "center",
     flexDirection: "column",
   },
+  select: {
+    mt: 1,
+    backgroundColor: "white",
+  },
   form: {
     width: "80%",
   },

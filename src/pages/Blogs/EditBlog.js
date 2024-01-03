@@ -3,17 +3,20 @@ import {
   Grid,
   Alert,
   Slide,
+  Select,
   Button,
+  MenuItem,
   Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
 import axios from "axios";
 import * as Yup from "yup";
-import React, { useState, useRef, useEffect } from "react";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import React, { useState, useRef, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useLocation, useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import style from "./style";
 import Layout from "../../components/Layout";
@@ -27,14 +30,41 @@ const EditBlog = () => {
 
   const [image, setImage] = useState(null);
   const [error, setError] = useState(false);
+  const [category, setCategory] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [categoryName, setCategoryName] = useState(
+    initialBlogDetails?.category || ""
+  );
+
+  useEffect(() => {
+    setLoading(true);
+
+    axios
+      .get(`${baseUrl}/blog/getBlogCategories`)
+      .then((resp) => {
+        const cat = resp.data.data;
+        setCategory(cat);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, [baseUrl]);
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required("Required!"),
     author: Yup.string().required("Required!"),
-    category: Yup.string().required("Required!"),
     tags: Yup.string().required("Required!"),
     description: Yup.string().required("Required!"),
   });
+
+  const handleChange = (event, setFieldValue) => {
+    const selected = category.find((data) => data.name === event.target.value);
+
+    setFieldValue("category", selected ? selected.id : null);
+    setCategoryName(event.target.value);
+  };
 
   const handleUpload = () => {
     fileInputRef.current.click();
@@ -51,7 +81,7 @@ const EditBlog = () => {
     const postData = {
       ...values,
       id: initialBlogDetails.id,
-      image: image[0],
+      image: image && image.length > 0 ? image[0] : null,
     };
 
     axios
@@ -106,14 +136,13 @@ const EditBlog = () => {
             initialValues={{
               title: initialBlogDetails?.title || "",
               author: initialBlogDetails?.author || "",
-              category: initialBlogDetails?.category || "",
               tags: initialBlogDetails?.tags || "",
               description: initialBlogDetails?.description || "",
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            {({ isSubmitting }) => (
+            {({ isSubmitting, setFieldValue }) => (
               <Form style={style.form}>
                 <Grid container gap={1} sx={style.block}>
                   <Box sx={style.form}>
@@ -154,20 +183,29 @@ const EditBlog = () => {
 
                   <Box sx={style.form}>
                     <Typography variant="body2">Category</Typography>
-                    <Field
-                      fullWidth
-                      size="small"
-                      margin="dense"
-                      as={TextField}
-                      name="category"
-                      variant="outlined"
-                      style={style.field}
-                    />
-                    <ErrorMessage
-                      component="div"
-                      name="category"
-                      style={style.error}
-                    />
+                    {loading ? (
+                      <Box sx={style.loader}>
+                        <CircularProgress sx={style.loaderColor} />
+                      </Box>
+                    ) : (
+                      <Select
+                        fullWidth
+                        size="small"
+                        sx={style.select}
+                        value={categoryName}
+                        id="demo-simple-select"
+                        onChange={(event) => handleChange(event, setFieldValue)}
+                      >
+                        <MenuItem
+                          value={initialBlogDetails.category}
+                        ></MenuItem>
+                        {category?.map((data) => (
+                          <MenuItem key={data.id} value={data.name}>
+                            {data.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
                   </Box>
 
                   <Box sx={style.form}>

@@ -7,12 +7,15 @@ import {
   Snackbar,
   TextField,
   Typography,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import axios from "axios";
 import * as Yup from "yup";
-import React, { useState, useRef } from "react";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import React, { useState, useRef, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import style from "./style";
 import Layout from "../../components/Layout";
@@ -23,15 +26,40 @@ const AddBlog = () => {
 
   const [image, setImage] = useState(null);
   const [error, setError] = useState(false);
+  const [category, setCategory] = useState([]);
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [categoryName, setCategoryName] = useState("");
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required("Required!"),
     author: Yup.string().required("Required!"),
-    category: Yup.string().required("Required!"),
     tags: Yup.string().required("Required!"),
     description: Yup.string().required("Required!"),
   });
+
+  useEffect(() => {
+    setLoading(true);
+
+    axios
+      .get(`${baseUrl}/blog/getBlogCategories`)
+      .then((resp) => {
+        const blog = resp.data.data;
+        setCategory(blog);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, [baseUrl]);
+
+  const handleChange = (event, setFieldValue) => {
+    const selected = category.find((data) => data.name === event.target.value);
+
+    setCategoryName(event.target.value);
+    setFieldValue("category", selected ? selected.id : null);
+  };
 
   const handleUpload = () => {
     fileInputRef.current.click();
@@ -69,6 +97,7 @@ const AddBlog = () => {
           setSubmitting(false);
           setSuccess(true);
           setImage(null);
+          setCategoryName("");
           resetForm();
         } else {
           setSubmitting(false);
@@ -135,7 +164,7 @@ const AddBlog = () => {
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            {({ isSubmitting }) => (
+            {({ isSubmitting, setFieldValue }) => (
               <Form style={style.form}>
                 <Grid container gap={1} sx={style.block}>
                   <Box sx={style.form}>
@@ -176,20 +205,27 @@ const AddBlog = () => {
 
                   <Box sx={style.form}>
                     <Typography variant="body2">Category</Typography>
-                    <Field
-                      fullWidth
-                      size="small"
-                      margin="dense"
-                      as={TextField}
-                      name="category"
-                      variant="outlined"
-                      style={style.field}
-                    />
-                    <ErrorMessage
-                      component="div"
-                      name="category"
-                      style={style.error}
-                    />
+
+                    {loading ? (
+                      <Box sx={style.loader}>
+                        <CircularProgress sx={style.loaderColor} />
+                      </Box>
+                    ) : (
+                      <Select
+                        fullWidth
+                        size="small"
+                        value={categoryName}
+                        sx={style.select}
+                        id="demo-simple-select"
+                        onChange={(event) => handleChange(event, setFieldValue)}
+                      >
+                        {category?.map((data, index) => (
+                          <MenuItem key={index} value={data.name}>
+                            {data.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
                   </Box>
 
                   <Box sx={style.form}>

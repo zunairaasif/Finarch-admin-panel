@@ -37,7 +37,7 @@ const AddLocation = () => {
 
     axios
       .post(`${baseUrl}/contact/addOffice`, values)
-      .then((response) => {
+      .then(() => {
         setSubmitting(false);
         setSuccess(true);
         resetForm();

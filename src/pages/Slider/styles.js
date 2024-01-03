@@ -3,7 +3,6 @@ const style = {
 
   wrapper: {
     mt: 3,
-    justifyContent: "center",
   },
   container: {
     p: 3,
@@ -17,6 +16,11 @@ const style = {
 
   //********* Add Slider Image ********* */
 
+  display: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   upload: {
     p: 7,
     mt: 3,
@@ -54,6 +58,17 @@ const style = {
     mt: 2,
     display: "flex",
     justifyContent: "center",
+  },
+  hover: {
+    zIndex: 1,
+    top: "5px",
+    right: "5px",
+    position: "absolute",
+    justifySelf: "center",
+    backgroundColor: "#e81a1a",
+    "&:hover": {
+      backgroundColor: "#e81a1a",
+    },
   },
 };
 

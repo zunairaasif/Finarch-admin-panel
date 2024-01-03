@@ -45,7 +45,7 @@ const EditLocation = () => {
 
     axios
       .post(`${baseUrl}/contact/updateOffice`, postData)
-      .then((response) => {
+      .then(() => {
         setSubmitting(false);
         navigate("/offices");
       })

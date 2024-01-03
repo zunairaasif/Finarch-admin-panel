@@ -10,25 +10,34 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import * as Yup from "yup";
-import React, { useRef, useState } from "react";
+import React, { useState, useRef } from "react";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import style from "./style";
 import Layout from "../../components/Layout";
 
-const AddTeamMember = () => {
+const EditBlog = () => {
+  const navigate = useNavigate();
+  const { state } = useLocation();
   const fileInputRef = useRef(null);
+  const initialBlogDetails = state?.row;
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState([]);
   const [error, setError] = useState(false);
-  const [success, setSuccess] = useState(false);
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Required!"),
-    job_post: Yup.string().required("Required!"),
-    qualification: Yup.string().required("Required!"),
+    title: Yup.string().required("Required!"),
+    author: Yup.string().required("Required!"),
+    category: Yup.string().required("Required!"),
+    tags: Yup.string().required("Required!"),
+    description: Yup.string().required("Required!"),
+  });
+
+  React.useEffect(() => {
+    console.log("image", initialBlogDetails.image);
   });
 
   const handleUpload = () => {
@@ -40,31 +49,31 @@ const AddTeamMember = () => {
     setImage(files);
   };
 
-  const handleSubmit = (values, { setSubmitting, resetForm }) => {
+  const handleSubmit = (values, { setSubmitting }) => {
     setSubmitting(true);
 
     const postData = {
       ...values,
-      image: image[0],
+      id: initialBlogDetails.id,
     };
 
     axios
-      .post(`${baseUrl}/team/addTeam`, postData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then(() => {
-        setSubmitting(false);
-        setSuccess(true);
-        setImage(null);
-        resetForm();
+      .post(`${baseUrl}/blog/updateBlog`, postData)
+      .then((resp) => {
+        if (resp.data.success) {
+          setSubmitting(false);
+          setImage([]);
+          navigate("/blogs");
+        } else {
+          setSubmitting(false);
+          setError(true);
+        }
       })
       .catch((error) => {
         console.error("Uploading Error:", error);
         setSubmitting(false);
         setError(true);
-        setImage(null);
+        setImage([]);
       });
   };
 
@@ -82,38 +91,25 @@ const AddTeamMember = () => {
       >
         <Alert sx={style.field} severity={"error"}>
           <Typography variant="body1">
-            Error posting member! Try again!
+            Error posting blog! Try again!
           </Typography>
-        </Alert>
-      </Snackbar>
-
-      <Snackbar
-        open={success}
-        autoHideDuration={3000}
-        TransitionComponent={Slide}
-        onClose={() => {
-          setSuccess(false);
-        }}
-        TransitionProps={{ direction: "left" }}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert sx={style.field} severity={"success"}>
-          <Typography variant="body1">Member posted successfully!</Typography>
         </Alert>
       </Snackbar>
 
       <Grid container sx={style.wrapper}>
         <Grid item lg={9} md={9} sm={12} xs={12} container sx={style.container}>
-          <Typography variant="h4">Add New Team Member</Typography>
+          <Typography variant="h4">Add New Blog</Typography>
           <Typography variant="body2" sx={style.space}>
-            Please enter details of the Team Member below.
+            Please update details of the Blog.
           </Typography>
 
           <Formik
             initialValues={{
-              name: "",
-              job_post: "",
-              qualification: "",
+              title: initialBlogDetails?.title || "",
+              author: initialBlogDetails?.author || "",
+              category: initialBlogDetails?.category || "",
+              tags: initialBlogDetails?.tags || "",
+              description: initialBlogDetails?.description || "",
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
@@ -122,11 +118,11 @@ const AddTeamMember = () => {
               <Form style={style.form}>
                 <Grid container gap={1} sx={style.block}>
                   <Box sx={style.form}>
-                    <Typography variant="body2">Name</Typography>
+                    <Typography variant="body2">Title</Typography>
                     <Field
                       fullWidth
                       size="small"
-                      name="name"
+                      name="title"
                       margin="dense"
                       as={TextField}
                       variant="outlined"
@@ -134,58 +130,97 @@ const AddTeamMember = () => {
                     />
                     <ErrorMessage
                       component="div"
-                      name="name"
+                      name="title"
                       style={style.error}
                     />
                   </Box>
 
                   <Box sx={style.form}>
-                    <Typography variant="body2">Designation</Typography>
+                    <Typography variant="body2">Author</Typography>
                     <Field
                       fullWidth
                       size="small"
                       margin="dense"
                       as={TextField}
-                      name="job_post"
+                      name="author"
                       variant="outlined"
                       style={style.field}
                     />
                     <ErrorMessage
                       component="div"
-                      name="job_post"
+                      name="author"
                       style={style.error}
                     />
                   </Box>
 
                   <Box sx={style.form}>
-                    <Typography variant="body2">Qualification</Typography>
+                    <Typography variant="body2">Category</Typography>
                     <Field
                       fullWidth
                       size="small"
                       margin="dense"
                       as={TextField}
-                      name="qualification"
+                      name="category"
                       variant="outlined"
                       style={style.field}
                     />
                     <ErrorMessage
                       component="div"
-                      name="qualification"
+                      name="category"
+                      style={style.error}
+                    />
+                  </Box>
+
+                  <Box sx={style.form}>
+                    <Typography variant="body2">Tags</Typography>
+                    <Field
+                      fullWidth
+                      size="small"
+                      margin="dense"
+                      as={TextField}
+                      name="tags"
+                      variant="outlined"
+                      style={style.field}
+                    />
+                    <ErrorMessage
+                      component="div"
+                      name="tags"
+                      style={style.error}
+                    />
+                  </Box>
+
+                  <Box sx={style.form}>
+                    <Typography variant="body2">Description</Typography>
+                    <Field
+                      fullWidth
+                      size="small"
+                      margin="dense"
+                      as={TextField}
+                      name="description"
+                      variant="outlined"
+                      style={style.field}
+                    />
+                    <ErrorMessage
+                      component="div"
+                      name="description"
                       style={style.error}
                     />
                   </Box>
 
                   <Typography variant="body2">
-                    Please attach the Porfolio Image of the Team Member.
+                    Please attach the Image of the Blog.
                   </Typography>
                   {image && image.length > 0 ? (
                     <Grid gap={2} container sx={style.display}>
-                      <img
-                        alt="Preview"
-                        width={200}
-                        height={160}
-                        src={URL.createObjectURL(image[0])}
-                      />
+                      {image.map((file, index) => (
+                        <img
+                          key={index}
+                          width={200}
+                          height={160}
+                          alt={`Preview ${index + 1}`}
+                          src={URL.createObjectURL(file)}
+                        />
+                      ))}
                       <Grid
                         item
                         lg={4}
@@ -196,6 +231,7 @@ const AddTeamMember = () => {
                         onClick={handleUpload}
                       >
                         <input
+                          multiple
                           type="file"
                           accept="image/*"
                           ref={fileInputRef}
@@ -206,23 +242,35 @@ const AddTeamMember = () => {
                       </Grid>
                     </Grid>
                   ) : (
-                    <Grid
-                      item
-                      lg={5}
-                      md={5}
-                      sm={5}
-                      xs={8}
-                      sx={style.upload}
-                      onClick={handleUpload}
-                    >
-                      <input
-                        type="file"
-                        accept="image/*"
-                        ref={fileInputRef}
-                        style={{ display: "none" }}
-                        onChange={handleFileChange}
-                      />
-                      <CameraAltIcon sx={style.imgIcon} />
+                    <Grid gap={2} container sx={style.display}>
+                      {image.map((file, index) => (
+                        <img
+                          key={index}
+                          width={200}
+                          height={160}
+                          alt={`Preview ${index + 1}`}
+                          src={initialBlogDetails.image || ""}
+                        />
+                      ))}
+                      <Grid
+                        item
+                        lg={5}
+                        md={5}
+                        sm={5}
+                        xs={8}
+                        sx={style.upload}
+                        onClick={handleUpload}
+                      >
+                        <input
+                          multiple
+                          type="file"
+                          accept="image/*"
+                          ref={fileInputRef}
+                          style={{ display: "none" }}
+                          onChange={handleFileChange}
+                        />
+                        <CameraAltIcon sx={style.imgIcon} />
+                      </Grid>
                     </Grid>
                   )}
 
@@ -246,4 +294,4 @@ const AddTeamMember = () => {
   );
 };
 
-export default AddTeamMember;
+export default EditBlog;

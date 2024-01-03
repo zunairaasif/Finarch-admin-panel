@@ -15,6 +15,7 @@ import Quotations from "../pages/Quotation";
 import AddUser from "../pages/Users/AddUser";
 import AddBlog from "../pages/Blogs/AddBlog";
 import EditUser from "../pages/Users/EditUser";
+import EditBlog from "../pages/Blogs/EditBlog";
 import Services from "../pages/Services/Service";
 import AddSlider from "../pages/Slider/AddSlider";
 import SubService from "../pages/Services/SubService";
@@ -44,8 +45,9 @@ const Routing = () => {
         <Route path="/add-team-member" element={<AddTeamMember />} />
         <Route path="/team" element={<Team />} />
         <Route path="/blogs" element={<Blogs />} />
-        <Route path="/add-blog" element={<AddBlog />} />
         <Route path="/blogs" element={<Blogs />} />
+        <Route path="/add-blog" element={<AddBlog />} />
+        <Route path="/blogs/update-blog/:id" element={<EditBlog />} />
         <Route path="/add-user" element={<AddUser />} />
         <Route path="/users/update-user/:id" element={<EditUser />} />
         <Route path="/users" element={<Users />} />

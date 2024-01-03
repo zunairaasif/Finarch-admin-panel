@@ -7,10 +7,14 @@ import {
   Snackbar,
   TextField,
   Typography,
+  IconButton,
+  ImageListItem,
+  ImageList,
 } from "@mui/material";
 import axios from "axios";
 import * as Yup from "yup";
 import React, { useRef, useState } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
@@ -24,6 +28,7 @@ const AddProject = () => {
   const [image, setImage] = useState([]);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Required!"),
@@ -36,14 +41,27 @@ const AddProject = () => {
     status: Yup.string().required("Required!"),
   });
 
+  const handleMouseEnter = (index) => {
+    setHoveredIndex(index);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredIndex(null);
+  };
+
+  const handleDeleteClick = (index) => {
+    const newImages = [...image];
+    newImages.splice(index, 1);
+    setImage(newImages);
+  };
+
   const handleUpload = () => {
     fileInputRef.current.click();
   };
 
   const handleFileChange = (event) => {
-    const files = Array.from(event.target.files);
-    console.log("image", files);
-    setImage(files);
+    const newFiles = Array.from(event.target.files);
+    setImage((prevImages) => [...prevImages, ...newFiles]);
   };
 
   const handleSubmit = (values, { setSubmitting, resetForm }) => {
@@ -76,7 +94,6 @@ const AddProject = () => {
           setImage([]);
           resetForm();
         } else {
-          console.log(resp.data);
           setSubmitting(false);
           setError(true);
         }
@@ -297,15 +314,29 @@ const AddProject = () => {
                   </Typography>
                   {image && image.length > 0 ? (
                     <Grid gap={2} container sx={style.display}>
-                      {image.map((file, index) => (
-                        <img
-                          key={index}
-                          width={200}
-                          height={160}
-                          alt={`Preview ${index + 1}`}
-                          src={URL.createObjectURL(file)}
-                        />
-                      ))}
+                      <ImageList cols={2}>
+                        {image.map((file, index) => (
+                          <ImageListItem
+                            key={index}
+                            onMouseLeave={handleMouseLeave}
+                            onMouseEnter={() => handleMouseEnter(index)}
+                          >
+                            <img
+                              key={index}
+                              alt={`Preview ${index + 1}`}
+                              src={URL.createObjectURL(file)}
+                            />
+                            {hoveredIndex === index && (
+                              <IconButton
+                                sx={style.hover}
+                                onClick={() => handleDeleteClick(index)}
+                              >
+                                <DeleteIcon sx={{ color: "white" }} />
+                              </IconButton>
+                            )}
+                          </ImageListItem>
+                        ))}
+                      </ImageList>
                       <Grid
                         item
                         lg={4}

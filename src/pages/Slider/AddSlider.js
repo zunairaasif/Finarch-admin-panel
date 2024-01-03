@@ -115,28 +115,45 @@ const AddSlider = () => {
             </Box>
           ) : (
             <>
-              <Grid sx={style.upload} onClick={handleUpload}>
-                <input
-                  type="file"
-                  accept="image/*"
-                  ref={fileInputRef}
-                  style={{ display: "none" }}
-                  onChange={handleFileChange}
-                />
-                {image && image.length > 0 ? (
-                  image?.map((data, index) => (
-                    <Typography
-                      key={index}
-                      variant="body1"
-                      sx={{ color: "black" }}
-                    >
-                      {data.name}
-                    </Typography>
-                  ))
-                ) : (
+              {image && image.length > 0 ? (
+                <Grid gap={2} container sx={style.display}>
+                  <img
+                    alt="Preview"
+                    width={200}
+                    height={160}
+                    src={URL.createObjectURL(image[0])}
+                  />
+                  <Grid
+                    item
+                    lg={3}
+                    md={3}
+                    sm={5}
+                    xs={8}
+                    sx={style.upload}
+                    onClick={handleUpload}
+                  >
+                    <input
+                      type="file"
+                      accept="image/*"
+                      ref={fileInputRef}
+                      style={{ display: "none" }}
+                      onChange={handleFileChange}
+                    />
+                    <CameraAltIcon sx={style.imgIcon} />
+                  </Grid>
+                </Grid>
+              ) : (
+                <Grid conatiner sx={style.upload} onClick={handleUpload}>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    style={{ display: "none" }}
+                    onChange={handleFileChange}
+                  />
                   <CameraAltIcon sx={style.imgIcon} />
-                )}
-              </Grid>
+                </Grid>
+              )}
 
               <Button variant="contained" sx={style.btn} onClick={handleSubmit}>
                 Submit

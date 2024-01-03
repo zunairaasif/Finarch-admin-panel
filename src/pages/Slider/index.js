@@ -123,7 +123,7 @@ const Slider = () => {
               <CircularProgress sx={style.loaderColor} />
             </Box>
           ) : (
-            <ImageList sx={style.imgList} cols={3} rowHeight={164}>
+            <ImageList sx={style.imgList} cols={3}>
               {image?.map((item, index) => (
                 <ImageListItem
                   key={index}
@@ -133,14 +133,7 @@ const Slider = () => {
                   <img loading="lazy" alt={item.id} src={item.image} />
                   {hoveredIndex === index && (
                     <IconButton
-                      style={{
-                        zIndex: 1,
-                        top: "5px",
-                        right: "5px",
-                        position: "absolute",
-                        justifySelf: "center",
-                        backgroundColor: "#e81a1a",
-                      }}
+                      sx={style.hover}
                       onClick={() => handleDeleteClick(item.id)}
                     >
                       <DeleteIcon sx={{ color: "white" }} />

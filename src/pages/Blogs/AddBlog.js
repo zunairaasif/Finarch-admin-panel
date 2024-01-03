@@ -21,7 +21,7 @@ const AddBlog = () => {
   const fileInputRef = useRef(null);
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
-  const [image, setImage] = useState([]);
+  const [image, setImage] = useState(null);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -51,14 +51,19 @@ const AddBlog = () => {
     };
 
     axios
-      .post(`${baseUrl}/blog/postBlog`, postData)
+      .post(`${baseUrl}/blog/postBlog`, postData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((resp) => {
         if (resp.data.success) {
           setSubmitting(false);
           setSuccess(true);
-          setImage([]);
+          setImage(null);
           resetForm();
         } else {
+          console.log(resp.data);
           setSubmitting(false);
           setError(true);
         }
@@ -67,7 +72,7 @@ const AddBlog = () => {
         console.error("Uploading Error:", error);
         setSubmitting(false);
         setError(true);
-        setImage([]);
+        setImage(null);
       });
   };
 

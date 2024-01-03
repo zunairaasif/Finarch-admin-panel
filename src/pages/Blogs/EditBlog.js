@@ -55,11 +55,15 @@ const EditBlog = () => {
     const postData = {
       ...values,
       id: initialBlogDetails.id,
-      image: image,
+      image: image[0],
     };
 
     axios
-      .post(`${baseUrl}/blog/updateBlog`, postData)
+      .post(`${baseUrl}/blog/updateBlog`, postData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((resp) => {
         if (resp.data.success) {
           setSubmitting(false);

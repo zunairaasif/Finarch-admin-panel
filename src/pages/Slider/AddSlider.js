@@ -143,7 +143,7 @@ const AddSlider = () => {
                   </Grid>
                 </Grid>
               ) : (
-                <Grid conatiner sx={style.upload} onClick={handleUpload}>
+                <Grid sx={style.upload} onClick={handleUpload}>
                   <input
                     type="file"
                     accept="image/*"

@@ -41,6 +41,7 @@ const Blogs = () => {
     { id: "author", label: "Author" },
     { id: "category", label: "Category" },
     { id: "tags", label: "Tags" },
+    { id: "date", label: "Date" },
     { id: "description", label: "Description" },
     { id: "action", label: "Actions" },
   ];

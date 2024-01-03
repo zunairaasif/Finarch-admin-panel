@@ -1,9 +1,9 @@
 import React from "react";
 import { Grid, useTheme, useMediaQuery } from "@mui/material";
 
+import Menu from "../Menu";
 import style from "./style";
 import SideMenu from "../SideMenu";
-// import Header from "../header";
 
 const Layout = ({ children }) => {
   const theme = useTheme();
@@ -11,9 +11,8 @@ const Layout = ({ children }) => {
 
   return (
     <Grid container sx={style.dashboard}>
-      {isMatch ? <SideMenu /> : null}
+      {isMatch ? <SideMenu /> : <Menu />}
       <Grid item lg={9.85} md={9.85} sm={9} sx={style.content}>
-        {/* <Header /> */}
         {children}
       </Grid>
     </Grid>

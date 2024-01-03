@@ -83,6 +83,17 @@ const style = {
     alignItems: "center",
     justifyContent: "center",
   },
+  hover: {
+    zIndex: 1,
+    top: "5px",
+    right: "5px",
+    position: "absolute",
+    justifySelf: "center",
+    backgroundColor: "#e81a1a",
+    "&:hover": {
+      backgroundColor: "#e81a1a",
+    },
+  },
   upload: {
     p: 7,
     mt: 2,

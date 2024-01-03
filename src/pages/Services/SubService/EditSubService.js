@@ -4,11 +4,11 @@ import {
   Alert,
   Slide,
   Button,
+  Select,
+  MenuItem,
   Snackbar,
   TextField,
   Typography,
-  Select,
-  MenuItem,
 } from "@mui/material";
 import axios from "axios";
 import * as Yup from "yup";
@@ -106,9 +106,9 @@ const EditSubService = () => {
 
       <Grid container sx={style.wrapper}>
         <Grid item lg={9} md={9} sm={12} xs={12} container sx={style.container}>
-          <Typography variant="h4">Add New Sub Service</Typography>
+          <Typography variant="h4">Update Sub Service</Typography>
           <Typography variant="body2" sx={style.space}>
-            Please enter the details of new Sub Service and provide Percentage.
+            Please update the details of Sub Service.
           </Typography>
 
           <Formik

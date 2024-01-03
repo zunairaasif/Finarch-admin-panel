@@ -43,6 +43,64 @@ const style = {
     display: "flex",
     alignItems: "center",
   },
+
+  //********* Add Team member ********* */
+
+  wrapper: {
+    mt: 3,
+    justifyContent: "center",
+  },
+  container: {
+    p: 3,
+    display: "flex",
+    borderRadius: 2,
+    alignItems: "center",
+    flexDirection: "column",
+    justifyContent: "center",
+    backgroundColor: "#2a2d3e",
+  },
+  space: {
+    mb: 4,
+  },
+  block: {
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "column",
+  },
+  form: {
+    width: "80%",
+  },
+  field: {
+    borderRadius: 4,
+    backgroundColor: "white",
+  },
+  error: {
+    color: "red",
+    fontSize: 12,
+  },
+  upload: {
+    p: 7,
+    mt: 2,
+    mb: 3,
+    display: "flex",
+    borderRadius: 2,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "white",
+  },
+  imgIcon: {
+    color: "grey",
+    fontSize: 50,
+  },
+  btn: {
+    width: "50%",
+    color: "black",
+    textTransform: "none",
+    backgroundColor: "white",
+    "&:hover": {
+      backgroundColor: "white",
+    },
+  },
 };
 
 export default style;

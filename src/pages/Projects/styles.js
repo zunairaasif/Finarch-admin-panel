@@ -85,7 +85,7 @@ const style = {
   },
   upload: {
     p: 7,
-    mt: 3,
+    mt: 2,
     mb: 3,
     display: "flex",
     borderRadius: 2,

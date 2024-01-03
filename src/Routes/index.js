@@ -17,12 +17,13 @@ import AddBlog from "../pages/Blogs/AddBlog";
 import EditUser from "../pages/Users/EditUser";
 import Services from "../pages/Services/Service";
 import AddSlider from "../pages/Slider/AddSlider";
-import SubService from "../pages/Services/Service";
+import SubService from "../pages/Services/SubService";
 import AddProject from "../pages/Projects/AddProject";
 import AddTeamMember from "../pages/Team/AddTeamMember";
 import AddLocation from "../pages/Location/AddLocation";
 import EditLocation from "../pages/Location/EditLocation";
 import AddService from "../pages/Services/Service/AddService";
+import EditService from "../pages/Services/Service/EditService";
 import AddSubService from "../pages/Services/SubService/AddSubService";
 import EditSubService from "../pages/Services/SubService/EditSubService";
 
@@ -54,8 +55,9 @@ const Routing = () => {
           element={<EditSubService />}
         />
         <Route path="/sub-services" element={<SubService />} />
-        <Route path="/add-service" element={<AddService />} />
         <Route path="/services" element={<Services />} />
+        <Route path="/add-service" element={<AddService />} />
+        <Route path="/services/update-service/:id" element={<EditService />} />
         <Route path="/add-location" element={<AddLocation />} />
         <Route path="/offices/update-location/:id" element={<EditLocation />} />
         <Route path="/offices" element={<Location />} />

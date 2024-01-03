@@ -87,7 +87,7 @@ const AddService = () => {
         <Grid item lg={9} md={9} sm={12} xs={12} container sx={style.container}>
           <Typography variant="h4">Add New Service</Typography>
           <Typography variant="body2" sx={style.space}>
-            Please enter the details of new Service and provide description.
+            Please enter the details of new Service.
           </Typography>
 
           <Formik

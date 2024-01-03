@@ -274,7 +274,19 @@ const AddProject = () => {
                     />
                   </Box>
 
-                  <Grid sx={style.upload} onClick={handleUpload}>
+                  <Typography variant="body2">
+                    Please attach the Porfolio Image of the Project in the
+                    sequence you want to be displayed on the website.
+                  </Typography>
+                  <Grid
+                    item
+                    lg={3}
+                    md={5}
+                    sm={5}
+                    xs={8}
+                    sx={style.upload}
+                    onClick={handleUpload}
+                  >
                     <input
                       multiple
                       type="file"

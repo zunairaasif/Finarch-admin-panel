@@ -129,7 +129,7 @@ const Location = () => {
       </Snackbar>
 
       <Grid container sx={style.spacing}>
-        <Typography variant="h5">View all Users</Typography>
+        <Typography variant="h5">View all Locations</Typography>
 
         <Box sx={style.user}>
           <Typography variant="body1">{user}</Typography>

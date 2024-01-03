@@ -7,7 +7,6 @@ import Blogs from "../pages/Blogs";
 import Users from "../pages/Users";
 import Slider from "../pages/Slider";
 import Projects from "../pages/Projects";
-import Services from "../pages/Services";
 import Location from "../pages/Location";
 import PrivateRoute from "./PrivateRoute";
 import Dashboard from "../pages/Dashboard";
@@ -16,14 +15,16 @@ import Quotations from "../pages/Quotation";
 import AddUser from "../pages/Users/AddUser";
 import AddBlog from "../pages/Blogs/AddBlog";
 import EditUser from "../pages/Users/EditUser";
+import Services from "../pages/Services/Service";
 import AddSlider from "../pages/Slider/AddSlider";
+import SubService from "../pages/Services/Service";
 import AddProject from "../pages/Projects/AddProject";
-import AddService from "../pages/Services/AddService";
-import SubService from "../pages/Services/SubServices";
 import AddTeamMember from "../pages/Team/AddTeamMember";
 import AddLocation from "../pages/Location/AddLocation";
 import EditLocation from "../pages/Location/EditLocation";
-import AddSubService from "../pages/Services/AddSubService";
+import AddService from "../pages/Services/Service/AddService";
+import AddSubService from "../pages/Services/SubService/AddSubService";
+import EditSubService from "../pages/Services/SubService/EditSubService";
 
 const Routing = () => {
   return (
@@ -48,6 +49,10 @@ const Routing = () => {
         <Route path="/users/update-user/:id" element={<EditUser />} />
         <Route path="/users" element={<Users />} />
         <Route path="/add-sub-service" element={<AddSubService />} />
+        <Route
+          path="/sub-services/update-sub-service/:id"
+          element={<EditSubService />}
+        />
         <Route path="/sub-services" element={<SubService />} />
         <Route path="/add-service" element={<AddService />} />
         <Route path="/services" element={<Services />} />

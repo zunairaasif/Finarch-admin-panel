@@ -84,7 +84,7 @@ const Login = () => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ status }) => (
+          {() => (
             <Form style={style.form}>
               <Grid container gap={2} sx={style.login}>
                 <Box sx={style.form}>
@@ -98,7 +98,6 @@ const Login = () => {
                     variant="outlined"
                     style={style.field}
                   />
-                  {status && <div style={style.error}>{status}</div>}
                   <ErrorMessage
                     component="div"
                     name="email"

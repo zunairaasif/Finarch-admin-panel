@@ -12,37 +12,35 @@ import axios from "axios";
 import * as Yup from "yup";
 import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useLocation, useNavigate } from "react-router-dom";
 
-import style from "./style";
-import Layout from "../../components/Layout";
+import style from "../style";
+import Layout from "../../../components/Layout";
 
-const EditUser = () => {
-  const navigate = useNavigate();
-  const { state } = useLocation();
-  const initialUserDetails = state?.row;
+const AddService = () => {
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
   const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().required("Required!").email(),
-    password: Yup.string().required("Required!").min(6),
+    service_name: Yup.string().required("Required!"),
+    rate: Yup.string().required("Required!"),
   });
 
-  const handleSubmit = (values, { setSubmitting }) => {
+  const handleSubmit = (values, { setSubmitting, resetForm }) => {
     setSubmitting(true);
 
-    const postData = {
-      ...values,
-      id: initialUserDetails.id,
-    };
-
     axios
-      .post(`${baseUrl}/users/updateUser`, postData)
-      .then(() => {
+      .post(`${baseUrl}/service/postService`, values)
+      .then((resp) => {
+        if (resp.success) {
+          setSubmitting(false);
+          setSuccess(true);
+          resetForm();
+        }
         setSubmitting(false);
-        navigate("/users");
+        setError(true);
+        console.error("Posting Error:", resp.data.error.message);
       })
       .catch((error) => {
         console.error("Uploading Error:", error);
@@ -65,22 +63,37 @@ const EditUser = () => {
       >
         <Alert sx={style.field} severity={"error"}>
           <Typography variant="body1">
-            Error updating user! Try again!
+            Error posting service! Try again!
           </Typography>
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={success}
+        autoHideDuration={3000}
+        TransitionComponent={Slide}
+        onClose={() => {
+          setSuccess(false);
+        }}
+        TransitionProps={{ direction: "left" }}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert sx={style.field} severity={"success"}>
+          <Typography variant="body1">Service posted successfully!</Typography>
         </Alert>
       </Snackbar>
 
       <Grid container sx={style.wrapper}>
         <Grid item lg={9} md={9} sm={12} xs={12} container sx={style.container}>
-          <Typography variant="h4">Update User</Typography>
+          <Typography variant="h4">Add New Service</Typography>
           <Typography variant="body2" sx={style.space}>
-            Please Enter the Updated Email and Password.
+            Please enter the details of new Service and provide description.
           </Typography>
 
           <Formik
             initialValues={{
-              email: initialUserDetails?.email || "",
-              password: initialUserDetails?.password || "",
+              service_name: "",
+              rate: "",
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
@@ -89,37 +102,36 @@ const EditUser = () => {
               <Form style={style.form}>
                 <Grid container gap={1} sx={style.block}>
                   <Box sx={style.form}>
-                    <Typography variant="body2">Email</Typography>
+                    <Typography variant="body2">Service Name</Typography>
                     <Field
                       fullWidth
                       size="small"
+                      name="service_name"
                       margin="dense"
                       as={TextField}
-                      name="email"
                       variant="outlined"
                       style={style.field}
                     />
                     <ErrorMessage
                       component="div"
-                      name="email"
+                      name="service_name"
                       style={style.error}
                     />
                   </Box>
-
                   <Box sx={style.form}>
-                    <Typography variant="body2">Password</Typography>
+                    <Typography variant="body2">Rate</Typography>
                     <Field
                       fullWidth
                       size="small"
+                      name="rate"
                       margin="dense"
                       as={TextField}
-                      name="password"
                       variant="outlined"
                       style={style.field}
                     />
                     <ErrorMessage
                       component="div"
-                      name="password"
+                      name="rate"
                       style={style.error}
                     />
                   </Box>
@@ -144,4 +156,4 @@ const EditUser = () => {
   );
 };
 
-export default EditUser;
+export default AddService;

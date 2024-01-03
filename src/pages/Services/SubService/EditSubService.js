@@ -7,47 +7,76 @@ import {
   Snackbar,
   TextField,
   Typography,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import axios from "axios";
 import * as Yup from "yup";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useLocation, useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 
-import style from "./style";
-import Layout from "../../components/Layout";
+import style from "../style";
+import Layout from "../../../components/Layout";
 
-const EditLocation = () => {
+const EditSubService = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const initialLocationDetails = state?.row;
+  const initialSubServiceDetails = state?.row;
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
   const [error, setError] = useState(false);
+  const [service, setService] = useState(
+    initialSubServiceDetails?.service_name || ""
+  );
+  const [services, setServices] = useState([]);
+  const [loadingServices, setLoadingServices] = useState(false);
 
   const validationSchema = Yup.object().shape({
+    service_id: Yup.string().required("Required!"),
     name: Yup.string().required("Required!"),
-    address: Yup.string().required("Required!"),
-    phone: Yup.string()
-      .required("Required!")
-      .matches(/^(\+92)?\d{10}$|^\d{11}$/, "Invalid phone number"),
-    email: Yup.string().required("Required!").email(),
-    location: Yup.string().required("Required!"),
+    weightage: Yup.string().required("Required!"),
   });
+
+  useEffect(() => {
+    setLoadingServices(true);
+
+    axios
+      .get(`${baseUrl}/service/getAllServices`)
+      .then((resp) => {
+        const service = resp.data.data;
+        setServices(service);
+        setLoadingServices(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoadingServices(false);
+      });
+  }, [baseUrl]);
+
+  const handleChange = (event, setFieldValue) => {
+    const selectedService = services.find(
+      (data) => data.service_name === event.target.value
+    );
+
+    setFieldValue("service_id", selectedService ? selectedService.id : null);
+    setService(event.target.value);
+  };
 
   const handleSubmit = (values, { setSubmitting }) => {
     setSubmitting(true);
 
     const postData = {
       ...values,
-      id: initialLocationDetails.id,
+      id: initialSubServiceDetails.id,
     };
 
     axios
-      .post(`${baseUrl}/contact/updateOffice`, postData)
-      .then((response) => {
+      .post(`${baseUrl}/service/updateSubService`, postData)
+      .then(() => {
         setSubmitting(false);
-        navigate("/offices");
+        navigate("/sub-services");
       })
       .catch((error) => {
         console.error("Uploading Error:", error);
@@ -70,32 +99,62 @@ const EditLocation = () => {
       >
         <Alert sx={style.field} severity={"error"}>
           <Typography variant="body1">
-            Error updating location! Try again!
+            Error posting sub service! Try again!
           </Typography>
         </Alert>
       </Snackbar>
 
       <Grid container sx={style.wrapper}>
         <Grid item lg={9} md={9} sm={12} xs={12} container sx={style.container}>
-          <Typography variant="h4">Update Office Location</Typography>
+          <Typography variant="h4">Add New Sub Service</Typography>
           <Typography variant="body2" sx={style.space}>
-            Please update details of the Office below.
+            Please enter the details of new Sub Service and provide Percentage.
           </Typography>
 
           <Formik
             initialValues={{
-              name: initialLocationDetails?.name || "",
-              address: initialLocationDetails?.address || "",
-              phone: initialLocationDetails?.phone || "",
-              email: initialLocationDetails?.email || "",
-              location: initialLocationDetails?.location || "",
+              name: initialSubServiceDetails?.name || "",
+              weightage: initialSubServiceDetails?.weightage || "",
+              service_id: initialSubServiceDetails?.service_id || null,
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            {({ isSubmitting }) => (
+            {({ isSubmitting, setFieldValue }) => (
               <Form style={style.form}>
                 <Grid container gap={1} sx={style.block}>
+                  {loadingServices ? (
+                    <Box sx={style.loader}>
+                      <CircularProgress sx={style.loaderColor} />
+                    </Box>
+                  ) : (
+                    <Box sx={style.form}>
+                      <Typography variant="body2">
+                        Select a service for which you want to add sub service
+                      </Typography>
+                      <Select
+                        fullWidth
+                        size="small"
+                        value={service}
+                        sx={style.select}
+                        // name="service_id"
+                        id="demo-simple-select"
+                        onChange={(event) => handleChange(event, setFieldValue)}
+                      >
+                        {services?.map((data) => (
+                          <MenuItem key={data.id} value={data.service_name}>
+                            {data.service_name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      <ErrorMessage
+                        component="div"
+                        name="service_id"
+                        style={style.error}
+                      />
+                    </Box>
+                  )}
+
                   <Box sx={style.form}>
                     <Typography variant="body2">Name</Typography>
                     <Field
@@ -115,75 +174,19 @@ const EditLocation = () => {
                   </Box>
 
                   <Box sx={style.form}>
-                    <Typography variant="body2">Address</Typography>
+                    <Typography variant="body2">Weightage</Typography>
                     <Field
                       fullWidth
                       size="small"
                       margin="dense"
                       as={TextField}
-                      name="address"
+                      name="weightage"
                       variant="outlined"
                       style={style.field}
                     />
                     <ErrorMessage
                       component="div"
-                      name="address"
-                      style={style.error}
-                    />
-                  </Box>
-
-                  <Box sx={style.form}>
-                    <Typography variant="body2">Phone</Typography>
-                    <Field
-                      fullWidth
-                      size="small"
-                      margin="dense"
-                      as={TextField}
-                      name="phone"
-                      variant="outlined"
-                      style={style.field}
-                    />
-                    <ErrorMessage
-                      component="div"
-                      name="phone"
-                      style={style.error}
-                    />
-                  </Box>
-
-                  <Box sx={style.form}>
-                    <Typography variant="body2">Email</Typography>
-                    <Field
-                      fullWidth
-                      size="small"
-                      margin="dense"
-                      as={TextField}
-                      name="email"
-                      variant="outlined"
-                      style={style.field}
-                    />
-                    <ErrorMessage
-                      component="div"
-                      name="email"
-                      style={style.error}
-                    />
-                  </Box>
-
-                  <Box sx={style.form}>
-                    <Typography variant="body2">
-                      Google Maps iframe Link
-                    </Typography>
-                    <Field
-                      fullWidth
-                      size="small"
-                      margin="dense"
-                      as={TextField}
-                      name="location"
-                      variant="outlined"
-                      style={style.field}
-                    />
-                    <ErrorMessage
-                      component="div"
-                      name="location"
+                      name="weightage"
                       style={style.error}
                     />
                   </Box>
@@ -208,4 +211,4 @@ const EditLocation = () => {
   );
 };
 
-export default EditLocation;
+export default EditSubService;

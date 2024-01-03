@@ -20,9 +20,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import CircularProgress from "@mui/material/CircularProgress";
 import React, { useContext, useState, useEffect } from "react";
 
-import style from "./style";
-import { UserContext } from "../../context";
-import Layout from "../../components/Layout";
+import style from "../style";
+import { UserContext } from "../../../context";
+import Layout from "../../../components/Layout";
 
 const Services = () => {
   const { user } = useContext(UserContext);

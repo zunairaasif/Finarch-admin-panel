@@ -48,7 +48,6 @@ const AddSlider = () => {
         },
       })
       .then((response) => {
-        console.log("Image Uploaded:", response.data);
         setLoading(false);
         setSuccess(true);
         setImage(null);

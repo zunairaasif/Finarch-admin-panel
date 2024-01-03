@@ -43,6 +43,55 @@ const style = {
     display: "flex",
     alignItems: "center",
   },
+
+  //*********** Add & Edit Service and Sub Service*********** */
+
+  wrapper: {
+    mt: 3,
+    justifyContent: "center",
+  },
+  container: {
+    p: 3,
+    display: "flex",
+    borderRadius: 2,
+    alignItems: "center",
+    flexDirection: "column",
+    justifyContent: "center",
+    backgroundColor: "#2a2d3e",
+  },
+  space: {
+    mb: 5,
+  },
+  block: {
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "column",
+  },
+  form: {
+    width: "80%",
+  },
+  select: {
+    mt: 1,
+    backgroundColor: "white",
+  },
+  field: {
+    borderRadius: 4,
+    backgroundColor: "white",
+  },
+  error: {
+    color: "red",
+    fontSize: 12,
+  },
+  btn: {
+    mt: 3,
+    width: "50%",
+    color: "black",
+    textTransform: "none",
+    backgroundColor: "white",
+    "&:hover": {
+      backgroundColor: "white",
+    },
+  },
 };
 
 export default style;

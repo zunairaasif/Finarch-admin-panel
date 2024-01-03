@@ -59,7 +59,6 @@ const AddProject = () => {
         },
       })
       .then((response) => {
-        console.log("Image Uploaded:", response.data);
         setSubmitting(false);
         setSuccess(true);
         setImage(null);
@@ -128,7 +127,7 @@ const AddProject = () => {
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            {({ isSubmitting, status }) => (
+            {({ isSubmitting }) => (
               <Form style={style.form}>
                 <Grid container gap={1} sx={style.block}>
                   <Box sx={style.form}>
@@ -142,7 +141,6 @@ const AddProject = () => {
                       variant="outlined"
                       style={style.field}
                     />
-                    {status && <div style={style.error}>{status}</div>}
                     <ErrorMessage
                       component="div"
                       name="name"

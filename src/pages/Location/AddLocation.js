@@ -38,7 +38,6 @@ const AddLocation = () => {
     axios
       .post(`${baseUrl}/contact/addOffice`, values)
       .then((response) => {
-        console.log("Location Uploaded:", response.data);
         setSubmitting(false);
         setSuccess(true);
         resetForm();
@@ -102,7 +101,7 @@ const AddLocation = () => {
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            {({ isSubmitting, status }) => (
+            {({ isSubmitting }) => (
               <Form style={style.form}>
                 <Grid container gap={1} sx={style.block}>
                   <Box sx={style.form}>
@@ -116,7 +115,6 @@ const AddLocation = () => {
                       variant="outlined"
                       style={style.field}
                     />
-                    {status && <div style={style.error}>{status}</div>}
                     <ErrorMessage
                       component="div"
                       name="name"

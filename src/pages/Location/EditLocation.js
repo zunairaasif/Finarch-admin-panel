@@ -12,15 +12,19 @@ import axios from "axios";
 import * as Yup from "yup";
 import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import style from "./style";
 import Layout from "../../components/Layout";
 
-const AddLocation = () => {
+const EditLocation = () => {
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  const initialLocationDetails = state?.row;
+  console.log("Data", initialLocationDetails);
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
   const [error, setError] = useState(false);
-  const [success, setSuccess] = useState(false);
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Required!"),
@@ -32,16 +36,20 @@ const AddLocation = () => {
     location: Yup.string().required("Required!"),
   });
 
-  const handleSubmit = (values, { setSubmitting, resetForm }) => {
+  const handleSubmit = (values, { setSubmitting }) => {
     setSubmitting(true);
 
+    const postData = {
+      ...values,
+      id: initialLocationDetails.id,
+    };
+
     axios
-      .post(`${baseUrl}/contact/addOffice`, values)
+      .post(`${baseUrl}/contact/updateOffice`, postData)
       .then((response) => {
         console.log("Location Uploaded:", response.data);
         setSubmitting(false);
-        setSuccess(true);
-        resetForm();
+        navigate("/offices");
       })
       .catch((error) => {
         console.error("Uploading Error:", error);
@@ -64,40 +72,25 @@ const AddLocation = () => {
       >
         <Alert sx={style.field} severity={"error"}>
           <Typography variant="body1">
-            Error posting location! Try again!
+            Error updating location! Try again!
           </Typography>
-        </Alert>
-      </Snackbar>
-
-      <Snackbar
-        open={success}
-        autoHideDuration={3000}
-        TransitionComponent={Slide}
-        onClose={() => {
-          setSuccess(false);
-        }}
-        TransitionProps={{ direction: "left" }}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert sx={style.field} severity={"success"}>
-          <Typography variant="body1">Location posted successfully!</Typography>
         </Alert>
       </Snackbar>
 
       <Grid container sx={style.wrapper}>
         <Grid item lg={9} md={9} sm={12} xs={12} container sx={style.container}>
-          <Typography variant="h4">Add New Office Location</Typography>
+          <Typography variant="h4">Edit Office Location</Typography>
           <Typography variant="body2" sx={style.space}>
-            Please enter details of the new Office below.
+            Please edit details of the Office below.
           </Typography>
 
           <Formik
             initialValues={{
-              name: "",
-              address: "",
-              phone: "",
-              email: "",
-              location: "",
+              name: initialLocationDetails?.name || "",
+              address: initialLocationDetails?.address || "",
+              phone: initialLocationDetails?.phone || "",
+              email: initialLocationDetails?.email || "",
+              location: initialLocationDetails?.location || "",
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
@@ -218,4 +211,4 @@ const AddLocation = () => {
   );
 };
 
-export default AddLocation;
+export default EditLocation;

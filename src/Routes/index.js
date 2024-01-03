@@ -21,6 +21,7 @@ import AddService from "../pages/Services/AddService";
 import SubService from "../pages/Services/SubServices";
 import AddTeamMember from "../pages/Team/AddTeamMember";
 import AddLocation from "../pages/Location/AddLocation";
+import EditLocation from "../pages/Location/EditLocation";
 import AddSubService from "../pages/Services/AddSubService";
 
 const Routing = () => {
@@ -49,6 +50,7 @@ const Routing = () => {
         <Route path="/add-service" element={<AddService />} />
         <Route path="/services" element={<Services />} />
         <Route path="/add-location" element={<AddLocation />} />
+        <Route path="/offices/edit-location/:id" element={<EditLocation />} />
         <Route path="/offices" element={<Location />} />
         {/* </Route> */}
       </Routes>

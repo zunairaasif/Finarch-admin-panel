@@ -98,7 +98,6 @@ const Dashboard = () => {
       .get(`${baseUrl}/projects/getAllProjects`)
       .then((resp) => {
         const projects = resp.data.data;
-        console.log(projects);
         setProject(projects.length);
         setLoadingProjects(false);
       })
